@@ -17,7 +17,6 @@ public class BackendServiceClient {
     public BackendServiceClient(@Value("${backend.service.url}") String backendUrl) {
         this.webClient = WebClient.builder()
                 .baseUrl(backendUrl)
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
     }
 
@@ -29,29 +28,31 @@ public class BackendServiceClient {
                 .bodyToMono(BundleResponse.class);
     }
 
-    public Mono<BundleResponse> createBundle(BundleRequest request, String correlationId) {
+    public Mono<String> createBundle(BundleRequest request, String correlationId) {
         return webClient.post()
                 .uri("/bundles")
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .header("X-Correlation-ID", correlationId)
                 .bodyValue(request)
                 .retrieve()
-                .bodyToMono(BundleResponse.class);
+                .bodyToMono(String.class);
     }
 
-    public Mono<BundleResponse> updateBundle(Long id, BundleRequest request, String correlationId) {
+    public Mono<String> updateBundle(Long id, BundleRequest request, String correlationId) {
         return webClient.patch()
                 .uri("/bundles/{id}", id)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .header("X-Correlation-ID", correlationId)
                 .bodyValue(request)
                 .retrieve()
-                .bodyToMono(BundleResponse.class);
+                .bodyToMono(String.class);
     }
 
-    public Mono<Void> deleteBundle(Long id, String correlationId) {
+    public Mono<String> deleteBundle(Long id, String correlationId) {
         return webClient.delete()
                 .uri("/bundles/{id}", id)
                 .header("X-Correlation-ID", correlationId)
                 .retrieve()
-                .bodyToMono(Void.class);
+                .bodyToMono(String.class);
     }
 }

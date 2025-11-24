@@ -17,28 +17,27 @@ public class SystemLayerController {
     private final BackendServiceClient backendServiceClient;
 
     @GetMapping("/{id}")
-    public Mono<ResponseEntity<BundleResponse>> getBundle(@PathVariable Long id, @RequestHeader(value = "X-Correlation-ID", required = false) String correlationId) {
+    public Mono<ResponseEntity<BundleResponse>> getBundleById(@PathVariable Long id, @RequestHeader(value = "X-Correlation-ID", required = false) String correlationId) {
         return backendServiceClient.getBundleById(id, correlationId)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Mono<ResponseEntity<BundleResponse>> createBundle(@RequestBody BundleRequest request, @RequestHeader(value = "X-Correlation-ID", required = false) String correlationId) {
+    public Mono<ResponseEntity<String>> createBundle(@RequestBody BundleRequest request, @RequestHeader(value = "X-Correlation-ID", required = false) String correlationId) {
         return backendServiceClient.createBundle(request, correlationId)
                 .map(ResponseEntity::ok);
     }
 
     @PatchMapping("/{id}")
-    public Mono<ResponseEntity<BundleResponse>> updateBundle(@PathVariable Long id, @RequestBody BundleRequest request, @RequestHeader(value = "X-Correlation-ID", required = false) String correlationId) {
+    public Mono<ResponseEntity<String>> updateBundle(@PathVariable Long id, @RequestBody BundleRequest request, @RequestHeader(value = "X-Correlation-ID", required = false) String correlationId) {
         return backendServiceClient.updateBundle(id, request, correlationId)
-                .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+                .map(ResponseEntity::ok);
     }
 
     @DeleteMapping("/{id}")
-    public Mono<ResponseEntity<Void>> deleteBundle(@PathVariable Long id, @RequestHeader(value = "X-Correlation-ID", required = false) String correlationId) {
+    public Mono<ResponseEntity<String>> deleteBundle(@PathVariable Long id, @RequestHeader(value = "X-Correlation-ID", required = false) String correlationId) {
         return backendServiceClient.deleteBundle(id, correlationId)
-                .then(Mono.just(ResponseEntity.noContent().build()));
+                .map(ResponseEntity::ok);
     }
 }
