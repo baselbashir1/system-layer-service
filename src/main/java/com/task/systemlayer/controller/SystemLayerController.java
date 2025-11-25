@@ -10,15 +10,15 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/system/bundles")
+@RequestMapping("/layer")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class SystemLayerController {
 
     private final BackendServiceClient backendServiceClient;
 
     @GetMapping("/{id}")
-    public Mono<ResponseEntity<BundleResponse>> getBundleById(@PathVariable Long id, @RequestHeader(value = "X-Correlation-ID", required = false) String correlationId) {
-        return backendServiceClient.getBundleById(id, correlationId)
+    public Mono<ResponseEntity<BundleResponse>> getBundle(@PathVariable Long id, @RequestHeader(value = "X-Correlation-ID", required = false) String correlationId) {
+        return backendServiceClient.getBundle(id, correlationId)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }

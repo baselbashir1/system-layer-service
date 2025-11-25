@@ -20,7 +20,7 @@ public class BackendServiceClient {
                 .build();
     }
 
-    public Mono<BundleResponse> getBundleById(Long id, String correlationId) {
+    public Mono<BundleResponse> getBundle(Long id, String correlationId) {
         return webClient.get()
                 .uri("/bundles/{id}", id)
                 .header("X-Correlation-ID", correlationId)
