@@ -4,7 +4,3 @@ server:
 backend:
   service:
     url: http://localhost:8082
-
-logging:
-  level:
-    org.springframework.web.reactive: DEBUG

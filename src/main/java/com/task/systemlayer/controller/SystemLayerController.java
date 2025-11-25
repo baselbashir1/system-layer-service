@@ -4,6 +4,7 @@ import com.task.systemlayer.dto.request.BundleRequest;
 import com.task.systemlayer.dto.response.BundleResponse;
 import com.task.systemlayer.service.BackendServiceClient;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -19,14 +20,15 @@ public class SystemLayerController {
     @GetMapping("/{id}")
     public Mono<ResponseEntity<BundleResponse>> getBundle(@PathVariable Long id, @RequestHeader(value = "X-Correlation-ID", required = false) String correlationId) {
         return backendServiceClient.getBundle(id, correlationId)
-                .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+                .map(ResponseEntity::ok);
     }
 
     @PostMapping
     public Mono<ResponseEntity<String>> createBundle(@RequestBody BundleRequest request, @RequestHeader(value = "X-Correlation-ID", required = false) String correlationId) {
         return backendServiceClient.createBundle(request, correlationId)
-                .map(ResponseEntity::ok);
+                .map(body -> ResponseEntity
+                        .status(HttpStatus.CREATED)
+                        .body(body));
     }
 
     @PatchMapping("/{id}")
