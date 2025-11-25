@@ -17,6 +17,7 @@
 - WebFlux
 - Correlation ID propagation
 - Lombok
+- ControllerAdvice for exception handling
 
 ## Build & Run
 ```bash
